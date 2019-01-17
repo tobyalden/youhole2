@@ -1,6 +1,7 @@
 const searchURL = 'https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&type=video&maxResults=50&key=AIzaSyAHu80T94GGhKOzjBs9z5yr0KU8v48Zh60&q='
 const englishWordsURL = 'https://raw.githubusercontent.com/ManiacDC/TypingAid/master/Wordlists/WordList%20English%20Gutenberg.txt'
 const spanishWordsURL = 'https://raw.githubusercontent.com/ManiacDC/TypingAid/master/Wordlists/Wordlist%20Spanish.txt'
+const CJKUnifiedIdeographsBlock = [0x4E00, 0x9FCC];
 
 // Loading the YouTube API (must be done in global scope)
 var tag = document.createElement('script');
@@ -75,15 +76,21 @@ $(function() {
     }
 
     function getSearchTerm() {
-        $.ajax({
-            type: "GET",
-            url: spanishWordsURL,
-            success: function(response) {
-                var randomLine = getRandomLineFromTextFile(response);
-                useSearchTerm(randomLine);
-            }
-            // TODO: Handle failure
-        });
+        useSearchTerm(getRandomCharacterFromUnicodeBlock(CJKUnifiedIdeographsBlock));
+        //$.ajax({
+            //type: "GET",
+            //url: spanishWordsURL,
+            //success: function(response) {
+                //var randomLine = getRandomLineFromTextFile(response);
+                //useSearchTerm(randomLine);
+            //}
+            //// TODO: Handle failure
+        //});
+    }
+
+    function getRandomCharacterFromUnicodeBlock(block) {
+        var randomCharacter = String.fromCharCode(block[0] + Math.random() * (block[1] - block[0] + 1));
+        return randomCharacter;
     }
 
     function getRandomLineFromTextFile(textFile) {
@@ -96,16 +103,18 @@ $(function() {
         console.log('Using search term: ' + searchTerm);
         $.ajax({
             type: "GET",
-            url: searchURL + searchTerm,
-            success: playVideo
+            url: searchURL + encodeURI(searchTerm),
+            success: playVideo,
             // TODO: Handle failure
         });
     }
 
-    function playVideo(responseJSON) {
-        // TODO: handle no results
-        var videoChoice = Math.floor(Math.random() * responseJSON.items.length);
-        var videoId = responseJSON.items[videoChoice].id.videoId;
+    function playVideo(response) {
+        if (response.items.length < 1) {
+            console.log('no results!');
+        }
+        var videoChoice = Math.floor(Math.random() * response.items.length);
+        var videoId = response.items[videoChoice].id.videoId;
         player.loadVideoById(videoId);
     }
 
