@@ -2,6 +2,7 @@ const searchURL = 'https://www.googleapis.com/youtube/v3/search?order=date&part=
 const englishWordsURL = 'https://raw.githubusercontent.com/ManiacDC/TypingAid/master/Wordlists/WordList%20English%20Gutenberg.txt'
 const spanishWordsURL = 'https://raw.githubusercontent.com/ManiacDC/TypingAid/master/Wordlists/Wordlist%20Spanish.txt'
 const CJKUnifiedIdeographsBlock = [0x4E00, 0x9FCC];
+const HangulSyllablesBlock = [0xAC00, 0xD7A3];
 
 // Loading the YouTube API (must be done in global scope)
 var tag = document.createElement('script');
@@ -17,7 +18,8 @@ function onYouTubeIframeAPIReady() {
         videoId: 'M7lc1UVf-VE',
         events: {
             'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
+            'onStateChange': onPlayerStateChange,
+            'onError': onError
         }
     });
 }
@@ -28,100 +30,108 @@ function onPlayerReady(event) {
     isPlayerReady = true;
 }
 
+function onError(event) {
+    console.log("YouTube error (code " + event.data + "). Restarting...");
+    findVideo();
+}
+
 var staticSfx = new Audio('public/static.ogg');
 staticSfx.loop = true;
 
 function onPlayerStateChange(event) {
     if(event.data == YT.PlayerState.PLAYING) {
-        // TODO: What if jQuery isn't loaded?
         $('#static').addClass('hidden');
         staticSfx.pause();
         $('#player').removeClass('hidden');
     }
 }
 
-$(function() {
-    var started = false;
-    function start() {
-        if(started) {
-            return;
-        }
-        staticSfx.play().then(
-            function(result) {
-                $('#static').removeClass('hidden');
-                $('#playicon').addClass('hidden');
-                started = true;
-                findVideo();
-            },
-            function(error) {
-                if(error instanceof DOMException && error.name == 'NotAllowedError') {
-                    // Chrome's autoplay policy prevented the audio from playing:
-                    // https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
-                    $('#playicon').removeClass('hidden');
-                }
+var started = false;
+function start() {
+    if(started) {
+        return;
+    }
+    staticSfx.play().then(
+        function(result) {
+            $('#static').removeClass('hidden');
+            $('#playicon').addClass('hidden');
+            started = true;
+            findVideo();
+        },
+        function(error) {
+            if(error instanceof DOMException && error.name == 'NotAllowedError') {
+                // Chrome's autoplay policy prevented the audio from playing:
+                // https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
+                $('#playicon').removeClass('hidden');
             }
-        );
-    }
-
-    start();
-
-    function findVideo() {
-        if(isPlayerReady) {
-            getSearchTerm();
-
         }
-        else {
-            setTimeout(findVideo, 100);
-        }
-    }
+    );
+}
 
-    function getSearchTerm() {
-        useSearchTerm(getRandomCharacterFromUnicodeBlock(CJKUnifiedIdeographsBlock));
-        //$.ajax({
-            //type: "GET",
-            //url: spanishWordsURL,
-            //success: function(response) {
-                //var randomLine = getRandomLineFromTextFile(response);
-                //useSearchTerm(randomLine);
-            //}
-            //// TODO: Handle failure
-        //});
-    }
+start();
 
-    function getRandomCharacterFromUnicodeBlock(block) {
-        var randomCharacter = String.fromCharCode(block[0] + Math.random() * (block[1] - block[0] + 1));
-        return randomCharacter;
-    }
+function findVideo() {
+    if(isPlayerReady) {
+        getSearchTerm();
 
-    function getRandomLineFromTextFile(textFile) {
-        var allLines = textFile.split("\n");
-        var index = Math.floor(allLines.length * Math.random());
-        return allLines[index];
     }
-
-    function useSearchTerm(searchTerm) {
-        console.log('Using search term: ' + searchTerm);
-        $.ajax({
-            type: "GET",
-            url: searchURL + encodeURI(searchTerm),
-            success: playVideo,
-            // TODO: Handle failure
-        });
+    else {
+        setTimeout(findVideo, 100);
     }
+}
 
-    function playVideo(response) {
-        if (response.items.length < 1) {
-            console.log('no results!');
-        }
+function getSearchTerm() {
+    useSearchTerm(getRandomCharacterFromUnicodeBlock(HangulSyllablesBlock));
+    //$.ajax({
+        //type: "GET",
+        //url: spanishWordsURL,
+        //success: function(response) {
+            //var randomLine = getRandomLineFromTextFile(response);
+            //useSearchTerm(randomLine);
+        //}
+        //// TODO: Handle failure
+    //});
+}
+
+function getRandomCharacterFromUnicodeBlock(block) {
+    var randomCharacter = String.fromCharCode(block[0] + Math.random() * (block[1] - block[0] + 1));
+    return randomCharacter;
+}
+
+function getRandomLineFromTextFile(textFile) {
+    var allLines = textFile.split("\n");
+    var index = Math.floor(allLines.length * Math.random());
+    return allLines[index];
+}
+
+function useSearchTerm(searchTerm) {
+    console.log('Using search term: ' + searchTerm);
+    $.ajax({
+        type: "GET",
+        url: searchURL + encodeURI(searchTerm),
+        success: playVideo,
+        // TODO: Handle failure
+    });
+}
+
+function playVideo(response) {
+    if (response.items.length < 1) {
+        console.log('No results!');
+        findVideo();
+    }
+    else {
+        console.log(response.items.length + " videos found.");
         var videoChoice = Math.floor(Math.random() * response.items.length);
         var videoId = response.items[videoChoice].id.videoId;
+        console.log("videoChoice is " + videoChoice);
+        console.log("videoId is " + videoId);
         player.loadVideoById(videoId);
     }
+}
 
-    $(document).click(function(e) {
-        // Require user input to start if Chrome blocks autoplay
-        if(!started) {
-            start();
-        }
-    });
+$(document).click(function(e) {
+    // Require user input to start if Chrome blocks autoplay
+    if(!started) {
+        start();
+    }
 });
