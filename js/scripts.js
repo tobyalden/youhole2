@@ -24,7 +24,7 @@ const KatakanaBlock = [0x30A0, 0x30FF];
 const TeluguBlock = [0x0C00, 0x0C7F];
 const TamilBlock = [0x0B80, 0x0BFF];
 
-const unicodeBlocks = [[CJKUnifiedIdeographsBlock], [HangulSyllablesBlock], [DevanagariBlock], [ArabicBlock], [BengaliBlock], [HiraganaBlock, KatakanaBlock], [HiraganaBlock, KatakanaBlock], [TeluguBlock], [TamilBlock], EmojiBlocks];
+const unicodeBlocks = [[CJKUnifiedIdeographsBlock], [HangulSyllablesBlock], [DevanagariBlock], [ArabicBlock], [BengaliBlock], [HiraganaBlock, KatakanaBlock], [HiraganaBlock, KatakanaBlock], [TeluguBlock], [TamilBlock]];
 // Hiragana & Katakana Blocks appear twice to account for Japan's strong YouTube presence:
 // https://www.statista.com/statistics/280685/number-of-monthly-unique-youtube-users/
 
@@ -120,26 +120,25 @@ function findVideo() {
 }
 
 function getSearchTerm() {
-    useSearchTerm(getRandomCharactersFromUnicodeBlocks(EmojiBlocks, 2));
-    //var useDictionary = Math.random() >= 0.5;
-    //if(useDictionary) {
-        //var dictionary = dictionaries[Math.floor(Math.random() * dictionaries.length)];
-        //console.log('Using dictionary: ' + dictionary);
-        //$.ajax({
-            //type: "GET",
-            //url: dictionary,
-            //success: function(response) {
-                //var randomLine = getRandomLineFromTextFile(response);
-                //useSearchTerm(randomLine);
-            //}
-            //// TODO: Handle failure
-        //});
-    //}
-    //else {
-        //var unicodeBlock = unicodeBlocks[Math.floor(Math.random() * unicodeBlocks.length)];
-        //console.log('Using Unicode block: ' + unicodeBlock);
-        //useSearchTerm(getRandomCharactersFromUnicodeBlocks(unicodeBlock, 2));
-    //}
+    var useDictionary = Math.random() >= 0.5;
+    if(useDictionary) {
+        var dictionary = dictionaries[Math.floor(Math.random() * dictionaries.length)];
+        console.log('Using dictionary: ' + dictionary);
+        $.ajax({
+            type: "GET",
+            url: dictionary,
+            success: function(response) {
+                var randomLine = getRandomLineFromTextFile(response);
+                useSearchTerm(randomLine);
+            }
+            // TODO: Handle failure
+        });
+    }
+    else {
+        var unicodeBlock = unicodeBlocks[Math.floor(Math.random() * unicodeBlocks.length)];
+        console.log('Using Unicode block: ' + unicodeBlock);
+        useSearchTerm(getRandomCharactersFromUnicodeBlocks(unicodeBlock, 2));
+    }
 }
 
 function getRandomCharactersFromUnicodeBlocks(blocks, numCharacters) {
