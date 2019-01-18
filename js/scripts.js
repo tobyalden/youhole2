@@ -3,6 +3,7 @@ const englishWordsURL = 'https://raw.githubusercontent.com/ManiacDC/TypingAid/ma
 const spanishWordsURL = 'https://raw.githubusercontent.com/ManiacDC/TypingAid/master/Wordlists/Wordlist%20Spanish.txt'
 const CJKUnifiedIdeographsBlock = [0x4E00, 0x9FCC];
 const HangulSyllablesBlock = [0xAC00, 0xD7A3];
+const DevanagariSyllablesBlock = [0x0900, 0x097F];
 
 // Loading the YouTube API (must be done in global scope)
 var tag = document.createElement('script');
@@ -81,7 +82,7 @@ function findVideo() {
 }
 
 function getSearchTerm() {
-    useSearchTerm(getRandomCharacterFromUnicodeBlock(HangulSyllablesBlock));
+    useSearchTerm(getRandomCharactersFromUnicodeBlock(DevanagariSyllablesBlock, 2));
     //$.ajax({
         //type: "GET",
         //url: spanishWordsURL,
@@ -93,9 +94,12 @@ function getSearchTerm() {
     //});
 }
 
-function getRandomCharacterFromUnicodeBlock(block) {
-    var randomCharacter = String.fromCharCode(block[0] + Math.random() * (block[1] - block[0] + 1));
-    return randomCharacter;
+function getRandomCharactersFromUnicodeBlock(block, numCharacters) {
+    var randomCharacters = "";
+    for(var i = 0; i < numCharacters; i++) {
+        randomCharacters += String.fromCharCode(block[0] + Math.random() * (block[1] - block[0] + 1));
+    }
+    return randomCharacters;
 }
 
 function getRandomLineFromTextFile(textFile) {
