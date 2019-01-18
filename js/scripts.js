@@ -7,6 +7,7 @@ const portugueseWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictio
 const frenchWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/French.dic'
 const russianWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/Russian.dic'
 const indonesianWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/Indonesia.dic'
+const germanWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/German.dic'
 // TODO: Load dictionaries asynchronous (or not at all)
 const CJKUnifiedIdeographsBlock = [0x4E00, 0x9FCC];
 const HangulSyllablesBlock = [0xAC00, 0xD7A3];
@@ -111,7 +112,7 @@ function getSearchTerm() {
     //useSearchTerm(getRandomCharactersFromUnicodeBlock(BengaliBlock, 2));
     $.ajax({
         type: "GET",
-        url: indonesianWordsURL,
+        url: germanWordsURL,
         success: function(response) {
             var randomLine = getRandomLineFromTextFile(response);
             useSearchTerm(randomLine);
