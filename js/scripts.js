@@ -62,7 +62,6 @@ function onPlayerStateChange(event) {
     if(event.data == YT.PlayerState.PLAYING) {
         $('#static').addClass('hidden');
         staticSfx.pause();
-        $('#player').removeClass('hidden');
         $('#censor').removeClass('hidden');
         censorTimeout = setTimeout(hideCensor, 4000);
     }
@@ -80,6 +79,7 @@ function start() {
         function(result) {
             $('#static').removeClass('hidden');
             $('#overlay').removeClass('hidden');
+            $('#player').removeClass('hidden');
             $('#playicon').addClass('hidden');
             started = true;
             findVideo();
@@ -218,7 +218,6 @@ function skipVideo() {
     staticSfx.play();
     player.pauseVideo();
     $('#static').removeClass('hidden');
-    $('#player').addClass('hidden');
     $('#censor').addClass('hidden');
     findVideo();
 }
