@@ -21,6 +21,11 @@ function onYouTubeIframeAPIReady() {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange,
             'onError': onError
+        },
+        playerVars: {
+            controls: 0,
+            disablekb: 1,
+            modestbranding: 1
         }
     });
 }
