@@ -1,3 +1,13 @@
+#censor {
+    z-index: 1;
+    position: fixed;
+    top: 10px;
+    left: 0px;
+    width: 100vw;
+    height: 50px;
+    background: black;
+}
+
 #static {
     background-image: url(../public/static.gif);
     position: fixed;
@@ -21,7 +31,7 @@
     left: 0px;
     width:100vw;
     height:100vh;
-    z-index: 1;
+    z-index: 2;
 }
 
 .centered {
