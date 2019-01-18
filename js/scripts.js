@@ -1,6 +1,7 @@
 const searchURL = 'https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&type=video&maxResults=50&key=AIzaSyAHu80T94GGhKOzjBs9z5yr0KU8v48Zh60&q='
 const englishWordsURL = 'https://raw.githubusercontent.com/ManiacDC/TypingAid/master/Wordlists/WordList%20English%20Gutenberg.txt'
 const spanishWordsURL = 'https://raw.githubusercontent.com/ManiacDC/TypingAid/master/Wordlists/Wordlist%20Spanish.txt'
+const portugueseWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/Portuguese%20(Brazilian).dic'
 const CJKUnifiedIdeographsBlock = [0x4E00, 0x9FCC];
 const HangulSyllablesBlock = [0xAC00, 0xD7A3];
 const DevanagariSyllablesBlock = [0x0900, 0x097F];
@@ -95,17 +96,17 @@ function findVideo() {
 }
 
 function getSearchTerm() {
-    useSearchTerm(getRandomCharactersFromUnicodeBlock(ArabicSyllablesBlock, 2));
+    //useSearchTerm(getRandomCharactersFromUnicodeBlock(ArabicSyllablesBlock, 2));
     //useSearchTerm(getRandomCharactersFromUnicodeBlock(DevanagariSyllablesBlock, 2));
-    //$.ajax({
-        //type: "GET",
-        //url: spanishWordsURL,
-        //success: function(response) {
-            //var randomLine = getRandomLineFromTextFile(response);
-            //useSearchTerm(randomLine);
-        //}
-        //// TODO: Handle failure
-    //});
+    $.ajax({
+        type: "GET",
+        url: portugueseWordsURL,
+        success: function(response) {
+            var randomLine = getRandomLineFromTextFile(response);
+            useSearchTerm(randomLine);
+        }
+        // TODO: Handle failure
+    });
 }
 
 function getRandomCharactersFromUnicodeBlock(block, numCharacters) {
@@ -119,7 +120,7 @@ function getRandomCharactersFromUnicodeBlock(block, numCharacters) {
 function getRandomLineFromTextFile(textFile) {
     var allLines = textFile.split("\n");
     var index = Math.floor(allLines.length * Math.random());
-    return allLines[index];
+    return allLines[index].split("/")[0];
 }
 
 function useSearchTerm(searchTerm) {
