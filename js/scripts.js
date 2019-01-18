@@ -2,6 +2,7 @@ const searchURL = 'https://www.googleapis.com/youtube/v3/search?order=date&part=
 const englishWordsURL = 'https://raw.githubusercontent.com/ManiacDC/TypingAid/master/Wordlists/WordList%20English%20Gutenberg.txt'
 const spanishWordsURL = 'https://raw.githubusercontent.com/ManiacDC/TypingAid/master/Wordlists/Wordlist%20Spanish.txt'
 const portugueseWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/Portuguese%20(Brazilian).dic'
+const frenchWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/French.dic'
 const CJKUnifiedIdeographsBlock = [0x4E00, 0x9FCC];
 const HangulSyllablesBlock = [0xAC00, 0xD7A3];
 const DevanagariSyllablesBlock = [0x0900, 0x097F];
@@ -100,7 +101,7 @@ function getSearchTerm() {
     //useSearchTerm(getRandomCharactersFromUnicodeBlock(DevanagariSyllablesBlock, 2));
     $.ajax({
         type: "GET",
-        url: portugueseWordsURL,
+        url: frenchWordsURL,
         success: function(response) {
             var randomLine = getRandomLineFromTextFile(response);
             useSearchTerm(randomLine);
