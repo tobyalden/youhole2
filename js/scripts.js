@@ -50,6 +50,9 @@ function onPlayerStateChange(event) {
         staticSfx.pause();
         $('#player').removeClass('hidden');
     }
+    else if(event.data == YT.PlayerState.ENDED) {
+        skipVideo();
+    }
 }
 
 var started = false;
@@ -141,7 +144,18 @@ function playVideo(response) {
 
 $(document).click(function(e) {
     // Require user input to start if Chrome blocks autoplay
+    // TODO: Handle mobile tap(?)
     if(!started) {
         start();
     }
+    else if($('#static').hasClass("hidden")) {
+        skipVideo();
+    }
 });
+
+function skipVideo() {
+    staticSfx.play();
+    $('#static').removeClass('hidden');
+    $('#player').addClass('hidden');
+    findVideo();
+}
