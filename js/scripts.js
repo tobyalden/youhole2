@@ -4,6 +4,7 @@ const spanishWordsURL = 'https://raw.githubusercontent.com/ManiacDC/TypingAid/ma
 const CJKUnifiedIdeographsBlock = [0x4E00, 0x9FCC];
 const HangulSyllablesBlock = [0xAC00, 0xD7A3];
 const DevanagariSyllablesBlock = [0x0900, 0x097F];
+const ArabicSyllablesBlock = [0x0600, 0x06FF];
 
 // Loading the YouTube API (must be done in global scope)
 var tag = document.createElement('script');
@@ -44,11 +45,14 @@ function onError(event) {
 var staticSfx = new Audio('public/static.ogg');
 staticSfx.loop = true;
 
+var censorTimeout;
 function onPlayerStateChange(event) {
     if(event.data == YT.PlayerState.PLAYING) {
         $('#static').addClass('hidden');
         staticSfx.pause();
         $('#player').removeClass('hidden');
+        $('#censor').removeClass('hidden');
+        censorTimeout = setTimeout(hideCensor, 2500);
     }
     else if(event.data == YT.PlayerState.ENDED) {
         skipVideo();
@@ -91,7 +95,8 @@ function findVideo() {
 }
 
 function getSearchTerm() {
-    useSearchTerm(getRandomCharactersFromUnicodeBlock(DevanagariSyllablesBlock, 2));
+    useSearchTerm(getRandomCharactersFromUnicodeBlock(ArabicSyllablesBlock, 2));
+    //useSearchTerm(getRandomCharactersFromUnicodeBlock(DevanagariSyllablesBlock, 2));
     //$.ajax({
         //type: "GET",
         //url: spanishWordsURL,
@@ -154,8 +159,18 @@ $(document).click(function(e) {
 });
 
 function skipVideo() {
+    if(censorTimeout != undefined) {
+        clearTimeout(censorTimeout);
+        console.log("Cleared censorTimeout.");
+    }
     staticSfx.play();
+    player.pauseVideo();
     $('#static').removeClass('hidden');
     $('#player').addClass('hidden');
+    $('#censor').addClass('hidden');
     findVideo();
+}
+
+function hideCensor() {
+    $('#censor').addClass('hidden');
 }
