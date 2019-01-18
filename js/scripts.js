@@ -9,6 +9,7 @@ const russianWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictionar
 const indonesianWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/Indonesia.dic'
 const germanWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/German.dic'
 const swahiliWordsURL = 'https://raw.githubusercontent.com/elastic/hunspell/master/dicts/sw/sw_KE.dic'
+const vietnameseWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/Vietnamese_vi_VN.dic'
 
 // TODO: Load dictionaries asynchronous (or not at all)
 const CJKUnifiedIdeographsBlock = [0x4E00, 0x9FCC];
@@ -117,16 +118,16 @@ function getSearchTerm() {
     //useSearchTerm(getRandomCharactersFromUnicodeBlock(DevanagariBlock, 2));
     //useSearchTerm(getRandomCharactersFromUnicodeBlock(BengaliBlock, 2));
     //useSearchTerm(getRandomCharactersFromUnicodeBlocks([HiraganaBlock, KatakanaBlock], 2));
-    useSearchTerm(getRandomCharactersFromUnicodeBlocks([TamilBlock], 2));
-    //$.ajax({
-        //type: "GET",
-        //url: swahiliWordsURL,
-        //success: function(response) {
-            //var randomLine = getRandomLineFromTextFile(response);
-            //useSearchTerm(randomLine);
-        //}
-        //// TODO: Handle failure
-    //});
+    //useSearchTerm(getRandomCharactersFromUnicodeBlocks([TamilBlock], 2));
+    $.ajax({
+        type: "GET",
+        url: vietnameseWordsURL,
+        success: function(response) {
+            var randomLine = getRandomLineFromTextFile(response);
+            useSearchTerm(randomLine);
+        }
+        // TODO: Handle failure
+    });
 }
 
 function getRandomCharactersFromUnicodeBlocks(blocks, numCharacters) {
