@@ -60,6 +60,7 @@ function start() {
     staticSfx.play().then(
         function(result) {
             $('#static').removeClass('hidden');
+            $('#overlay').removeClass('hidden');
             $('#playicon').addClass('hidden');
             started = true;
             findVideo();
