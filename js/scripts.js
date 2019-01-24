@@ -67,7 +67,7 @@ function onError(event) {
     findVideo();
 }
 
-var staticSfx = new Audio('public/static.ogg');
+var staticSfx = new Audio('public/static.mp3');
 staticSfx.loop = true;
 
 var censorTimeout;
