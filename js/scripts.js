@@ -68,23 +68,22 @@ function onError(event) {
     findVideo();
 }
 
-//var staticSfx = new Audio('public/static.mp3');
-//staticSfx.loop = true;
+var staticSfx = new Audio('public/static.mp3');
+staticSfx.loop = true;
 
 var started = false;
+var firstVideoFound = false;
 var censorTimeout;
 function onPlayerStateChange(event) {
-    if(event.data == YT.PlayerState.PLAYING) {
-        if(!started) {
-            player.pauseVideo();
-            start();
-        }
-        else {
-            $('#static').addClass('hidden');
-            //staticSfx.pause();
-            $('#censor').removeClass('hidden');
-            censorTimeout = setTimeout(hideCensor, 4000);
-        }
+    if(event.data == YT.PlayerState.BUFFERING && !started) {
+        player.pauseVideo();
+        start();
+    }
+    if(event.data == YT.PlayerState.PLAYING && firstVideoFound) {
+        $('#static').addClass('hidden');
+        staticSfx.pause();
+        $('#censor').removeClass('hidden');
+        censorTimeout = setTimeout(hideCensor, 4000);
     }
     else if(event.data == YT.PlayerState.ENDED) {
         skipVideo();
@@ -95,6 +94,7 @@ function start() {
     if(started) {
         return;
     }
+    staticSfx.play();
     $('#static').removeClass('hidden');
     $('#overlay').removeClass('hidden');
     //$('#player').removeClass('hidden');
@@ -103,45 +103,7 @@ function start() {
     findVideo();
 }
 
-//function start() {
-    //if(started) {
-        //return;
-    //}
-    //staticSfx.play().then(
-        //function(result) {
-            //$('#static').removeClass('hidden');
-            //$('#overlay').removeClass('hidden');
-            //$('#player').removeClass('hidden');
-            ////$('#playicon').addClass('hidden');
-            //started = true;
-            //findVideo();
-        //},
-        //function(error) {
-            //if(error instanceof DOMException && error.name == 'NotAllowedError') {
-                //// Chrome's autoplay policy prevented the audio from playing:
-                //// https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
-                //$('#player').removeClass('hidden');
-                //log('NotAllowedError');
-            //}
-            //else {
-                //log('another error: ' + error.name);
-            //}
-        //}
-    //);
-//}
-
-//start();
-
 function findVideo() {
-    //if(isPlayerReady) {
-        getSearchTerm();
-    //}
-    //else {
-        //setTimeout(findVideo, 100);
-    //}
-}
-
-function getSearchTerm() {
     var useDictionary = Math.random() >= 0.5;
     if(useDictionary) {
         var dictionary = dictionaries[Math.floor(Math.random() * dictionaries.length)];
@@ -218,6 +180,7 @@ function playVideo(response) {
                     }
                     else {
                         log("Playing video with " + viewCount + " views.");
+                        firstVideoFound = true;
                         player.loadVideoById(videoId);
                     }
                 }
@@ -264,7 +227,7 @@ function skipVideo() {
         clearTimeout(censorTimeout);
         log("Cleared censorTimeout.");
     }
-    //staticSfx.play();
+    staticSfx.play();
     player.pauseVideo();
     $('#static').removeClass('hidden');
     $('#censor').addClass('hidden');
