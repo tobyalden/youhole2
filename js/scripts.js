@@ -51,7 +51,8 @@ function onYouTubeIframeAPIReady() {
         playerVars: {
             controls: 0,
             disablekb: 1,
-            modestbranding: 1
+            modestbranding: 1,
+            playsinline: 1
         }
     });
 }
@@ -67,56 +68,77 @@ function onError(event) {
     findVideo();
 }
 
-var staticSfx = new Audio('public/static.mp3');
-staticSfx.loop = true;
+//var staticSfx = new Audio('public/static.mp3');
+//staticSfx.loop = true;
 
+var started = false;
 var censorTimeout;
 function onPlayerStateChange(event) {
     if(event.data == YT.PlayerState.PLAYING) {
-        $('#static').addClass('hidden');
-        staticSfx.pause();
-        $('#censor').removeClass('hidden');
-        censorTimeout = setTimeout(hideCensor, 4000);
+        if(!started) {
+            player.pauseVideo();
+            start();
+        }
+        else {
+            $('#static').addClass('hidden');
+            //staticSfx.pause();
+            $('#censor').removeClass('hidden');
+            censorTimeout = setTimeout(hideCensor, 4000);
+        }
     }
     else if(event.data == YT.PlayerState.ENDED) {
         skipVideo();
     }
 }
 
-var started = false;
 function start() {
     if(started) {
         return;
     }
-    staticSfx.play().then(
-        function(result) {
-            $('#static').removeClass('hidden');
-            $('#overlay').removeClass('hidden');
-            $('#player').removeClass('hidden');
-            $('#playicon').addClass('hidden');
-            started = true;
-            findVideo();
-        },
-        function(error) {
-            if(error instanceof DOMException && error.name == 'NotAllowedError') {
-                // Chrome's autoplay policy prevented the audio from playing:
-                // https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
-                $('#playicon').removeClass('hidden');
-            }
-        }
-    );
+    $('#static').removeClass('hidden');
+    $('#overlay').removeClass('hidden');
+    //$('#player').removeClass('hidden');
+    //$('#playicon').addClass('hidden');
+    started = true;
+    findVideo();
 }
 
-start();
+//function start() {
+    //if(started) {
+        //return;
+    //}
+    //staticSfx.play().then(
+        //function(result) {
+            //$('#static').removeClass('hidden');
+            //$('#overlay').removeClass('hidden');
+            //$('#player').removeClass('hidden');
+            ////$('#playicon').addClass('hidden');
+            //started = true;
+            //findVideo();
+        //},
+        //function(error) {
+            //if(error instanceof DOMException && error.name == 'NotAllowedError') {
+                //// Chrome's autoplay policy prevented the audio from playing:
+                //// https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
+                //$('#player').removeClass('hidden');
+                //log('NotAllowedError');
+            //}
+            //else {
+                //log('another error: ' + error.name);
+            //}
+        //}
+    //);
+//}
+
+//start();
 
 function findVideo() {
-    if(isPlayerReady) {
+    //if(isPlayerReady) {
         getSearchTerm();
-
-    }
-    else {
-        setTimeout(findVideo, 100);
-    }
+    //}
+    //else {
+        //setTimeout(findVideo, 100);
+    //}
 }
 
 function getSearchTerm() {
@@ -228,6 +250,7 @@ function isBlacklisted(response) {
 $(document).click(function(e) {
     // Require user input to start if Chrome blocks autoplay
     // TODO: Handle mobile tap(?)
+    log("Click!");
     if(!started) {
         start();
     }
@@ -241,7 +264,7 @@ function skipVideo() {
         clearTimeout(censorTimeout);
         log("Cleared censorTimeout.");
     }
-    staticSfx.play();
+    //staticSfx.play();
     player.pauseVideo();
     $('#static').removeClass('hidden');
     $('#censor').addClass('hidden');
