@@ -58,12 +58,12 @@ function onYouTubeIframeAPIReady() {
 
 var isPlayerReady = false;
 function onPlayerReady(event) {
-    console.log('YouTube API loaded.');
+    log('YouTube API loaded.');
     isPlayerReady = true;
 }
 
 function onError(event) {
-    console.log("YouTube error (code " + event.data + "). Restarting...");
+    log("YouTube error (code " + event.data + "). Restarting...");
     findVideo();
 }
 
@@ -123,7 +123,7 @@ function getSearchTerm() {
     var useDictionary = Math.random() >= 0.5;
     if(useDictionary) {
         var dictionary = dictionaries[Math.floor(Math.random() * dictionaries.length)];
-        console.log('Using dictionary: ' + dictionary);
+        log('Using dictionary: ' + dictionary);
         $.ajax({
             type: "GET",
             url: dictionary,
@@ -136,7 +136,7 @@ function getSearchTerm() {
     }
     else {
         var unicodeBlock = unicodeBlocks[Math.floor(Math.random() * unicodeBlocks.length)];
-        console.log('Using Unicode block: ' + unicodeBlock);
+        log('Using Unicode block: ' + unicodeBlock);
         useSearchTerm(getRandomCharactersFromUnicodeBlocks(unicodeBlock, 2));
     }
 }
@@ -157,7 +157,7 @@ function getRandomLineFromTextFile(textFile) {
 }
 
 function useSearchTerm(searchTerm) {
-    console.log('Using search term: ' + searchTerm);
+    log('Using search term: ' + searchTerm);
     $.ajax({
         type: "GET",
         url: searchURL + encodeURI(searchTerm),
@@ -168,34 +168,34 @@ function useSearchTerm(searchTerm) {
 
 function playVideo(response) {
     if (response.items.length < 1) {
-        console.log('No results! Restarting...');
+        log('No results! Restarting...');
         findVideo();
     }
     else if(isBlacklisted(response)) {
         findVideo();
     }
     else {
-        console.log(response.items.length + " videos found.");
+        log(response.items.length + " videos found.");
         var videoChoice = Math.floor(Math.random() * response.items.length);
         var videoId = response.items[videoChoice].id.videoId;
-        console.log("videoChoice is " + videoChoice);
-        console.log("videoId is " + videoId);
+        log("videoChoice is " + videoChoice);
+        log("videoId is " + videoId);
         $.ajax({
             type: "GET",
             url: statsURL + videoId,
             success: function(statsResponse) {
                 if(statsResponse == undefined || statsResponse.items == undefined || statsResponse.items[0] == undefined) {
-                    console.log("Stats unavailable. Restarting...");
+                    log("Stats unavailable. Restarting...");
                     findVideo();
                 }
                 else {
                     var viewCount = statsResponse.items[0].statistics.viewCount;
                     if(viewCount > viewCountThreshold) {
-                        console.log("Too many views: " + viewCount + ". Restarting...");
+                        log("Too many views: " + viewCount + ". Restarting...");
                         findVideo();
                     }
                     else {
-                        console.log("Playing video with " + viewCount + " views.");
+                        log("Playing video with " + viewCount + " views.");
                         player.loadVideoById(videoId);
                     }
                 }
@@ -206,14 +206,19 @@ function playVideo(response) {
     }
 }
 
+function log(message) {
+    $('#errors').append(message + '<br>');
+    console.log(message);
+}
+
 function isBlacklisted(response) {
     var title = response.items[0].snippet.title.toLowerCase();
     var description = response.items[0].snippet.description.toLowerCase();
-    console.log("Title: " + title);
-    console.log("Description: " + description);
+    log("Title: " + title);
+    log("Description: " + description);
     for(var i = 0; i < keywordBlacklist.length; i++) {
         if(title.includes(keywordBlacklist[i]) || description.includes(keywordBlacklist[i])) {
-            console.log('Title or description contained blacklisted word or phrase: ' + keywordBlacklist[i] + '. Restarting...');
+            log('Title or description contained blacklisted word or phrase: ' + keywordBlacklist[i] + '. Restarting...');
             return true;
         }
     }
@@ -234,7 +239,7 @@ $(document).click(function(e) {
 function skipVideo() {
     if(censorTimeout != undefined) {
         clearTimeout(censorTimeout);
-        console.log("Cleared censorTimeout.");
+        log("Cleared censorTimeout.");
     }
     staticSfx.play();
     player.pauseVideo();

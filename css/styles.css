@@ -1,3 +1,13 @@
+#errors {
+    z-index: 1;
+    position: fixed;
+    top: 10px;
+    left: 0px;
+    width: 100vw;
+    color: red;
+    font-size: 16pt;
+}
+
 #censor {
     z-index: 1;
     position: fixed;
