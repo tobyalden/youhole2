@@ -264,7 +264,7 @@ document.onfullscreenchange = function(e) {
     }
 }
 
-$(document).click(function(e) {
+$(document).on('click keypress', function(e) {
     if(e.target.id == "fullscreen") {
         return;
     }
