@@ -117,6 +117,7 @@ function start() {
     $('#static').removeClass('hidden');
     $('#overlay').removeClass('hidden');
     $('#playicon').addClass('hidden');
+    $('#warning').addClass('hidden');
     started = true;
     findVideo();
 }

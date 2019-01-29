@@ -10,6 +10,17 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
+#warning {
+    z-index: 3;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: red;
+    width: 25vw;
+    font-size: 16pt;
+    font-family: sans-serif;
+}
+
 #fullscreen {
     z-index: 3;
     position: absolute;
