@@ -1,16 +1,16 @@
 const searchURL = 'https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&type=video&maxResults=50&key=AIzaSyAHu80T94GGhKOzjBs9z5yr0KU8v48Zh60&q='
 const statsURL = "https://www.googleapis.com/youtube/v3/videos?part=statistics&key=AIzaSyAHu80T94GGhKOzjBs9z5yr0KU8v48Zh60&id=";
 
-const englishWordsURL = 'https://raw.githubusercontent.com/first20hours/google-10000-english/master/google-10000-english-usa.txt'
-const spanishWordsURL = 'https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/spanish.txt'
-const portugueseWordsURL = 'https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2016/pt/pt_50k.txt'
-const frenchWordsURL = 'https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2016/fr/fr_50k.txt'
-const russianWordsURL = 'https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2016/ru/ru_50k.txt'
-const indonesianWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/Indonesia.dic'
-const germanWordsURL = 'https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2016/de/de_50k.txt'
-const swahiliWordsURL = 'https://raw.githubusercontent.com/elastic/hunspell/master/dicts/sw/sw_KE.dic'
-const vietnameseWordsURL = 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/master/Vietnamese_vi_VN.dic'
-const italianWordsURL = 'https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2016/it/it_50k.txt'
+const englishWordsURL = 'https://raw.githubusercontent.com/tobyalden/youhole2/master/dictionaries/google-10000-english-usa.txt'
+const spanishWordsURL = 'https://raw.githubusercontent.com/tobyalden/youhole2/master/dictionaries/spanish.txt'
+const portugueseWordsURL = 'https://raw.githubusercontent.com/tobyalden/youhole2/master/dictionaries/pt_50k.txt'
+const frenchWordsURL = 'https://raw.githubusercontent.com/tobyalden/youhole2/master/dictionaries/fr_50k.txt'
+const russianWordsURL = 'https://raw.githubusercontent.com/tobyalden/youhole2/master/dictionaries/ru_50k.txt'
+const indonesianWordsURL = 'https://raw.githubusercontent.com/tobyalden/youhole2/master/dictionaries/Indonesia.dic.txt'
+const germanWordsURL = 'https://raw.githubusercontent.com/tobyalden/youhole2/master/dictionaries/de_50k.txt'
+const swahiliWordsURL = 'https://raw.githubusercontent.com/tobyalden/youhole2/master/dictionaries/sw_KE.dic.txt'
+const vietnameseWordsURL = 'https://raw.githubusercontent.com/tobyalden/youhole2/master/dictionaries/Vietnamese_vi_VN.dic.txt'
+const italianWordsURL = 'https://raw.githubusercontent.com/tobyalden/youhole2/master/dictionaries/it_50k.txt'
 const dictionaries = [englishWordsURL, englishWordsURL, englishWordsURL, spanishWordsURL, portugueseWordsURL, frenchWordsURL, russianWordsURL, russianWordsURL, indonesianWordsURL, germanWordsURL, swahiliWordsURL, vietnameseWordsURL, italianWordsURL];
 // English and Russian dictionaries appear more than once to account for their strong YouTube presence:
 // https://www.statista.com/statistics/280685/number-of-monthly-unique-youtube-users/
