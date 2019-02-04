@@ -1,4 +1,4 @@
-const searchURL = 'https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&type=video&eventType=completed&safeSearch=none&maxResults=50&key=AIzaSyAHu80T94GGhKOzjBs9z5yr0KU8v48Zh60&q='
+const searchURL = 'https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&type=video&safeSearch=none&maxResults=50&key=AIzaSyAHu80T94GGhKOzjBs9z5yr0KU8v48Zh60&q='
 const statsURL = "https://www.googleapis.com/youtube/v3/videos?part=statistics&key=AIzaSyAHu80T94GGhKOzjBs9z5yr0KU8v48Zh60&id=";
 
 const englishWordsURL = 'https://raw.githubusercontent.com/tobyalden/youhole2/master/dictionaries/google-10000-english-usa.txt'
